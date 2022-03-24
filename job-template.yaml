@@ -23,8 +23,6 @@ objects:
           args:
           - ${JENKINS_PIPELINE_RETURN_URL}
           - ${FILE_NAME}
-          - ${USER_NAME}
-          - ${PASSWORD}
           imagePullPolicy: Always
           resources: {}
           terminationMessagePath: /dev/termination-log
@@ -38,12 +36,6 @@ parameters:
   required: true
 - description: Test file name
   name: FILE_NAME
-  required: true
-- description: Jenkins username for curl command
-  name: USER_NAME
-  required: true
-- description: Jenkins password for curl command
-  name: PASSWORD
   required: true
 - description: JMeter image from specific cluster/project
   name: IMAGE
