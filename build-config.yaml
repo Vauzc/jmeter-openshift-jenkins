@@ -14,7 +14,7 @@ spec:
   source:
     git:
       ref: master
-      uri: https://github.com/Vauzc/jmeter-openshift-jenkins.git
+      uri: https://github.com/Vauzc/jmeter-openshift-jenkins
     type: Git
     contextDir: /
   strategy:
