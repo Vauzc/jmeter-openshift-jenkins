@@ -6,41 +6,18 @@ node('jenkins-agent'){
 
   workspace = pwd()   // Set the main workspace in your Jenkins agent
 
-  authToken = ""      // Get your user auth token for OpenShift
-  apiURL = ""         // URL for your OpenShift cluster API
-
-  gitUser = ""        // Set your Git username
-  gitPass = ""        // Set your Git password
-  gitURL = ""         // Set the URL of your test suite repo
-  gitName = ""        // Set the name of your test suite repo
-  gitBranch = ""      // Set the branch of your test suite repo
-
-  jenkinsUser = ""    // Set username for Jenkins
-  jenkinsPass = ""    // Set API token for Jenkins
-
   // Set location of OpenShift objects in workspace
-  buildConfigPath = "${workspace}/${gitName}/build-config.yaml"
-  imageStreamPath = "${workspace}/${gitName}/image-stream.yaml"
-  jobTemplatePath = "${workspace}/${gitName}/job-template.yaml"
+  buildConfigPath = "build-config.yaml"
+  imageStreamPath = "image-stream.yaml"
+  jobTemplatePath = "job-template.yaml"
 
-  project = ""    // Set the OpenShift project you're working in
+  project = "devops"    // Set the OpenShift project you're working in
   testSuiteName = "jmeter-test-suite"   // Name of the job/build/imagestream
 
-  // Login to the OpenShift cluster
-  sh """
-      set +x
-      oc login --insecure-skip-tls-verify=true --token=${authToken} ${apiURL}
-  """
-
-  // Checkout the test suite repo into your Jenkins agent workspace
-  int slashIdx = gitURL.indexOf("://")
-  String urlWithCreds = gitURL.substring(0, slashIdx + 3) +
-          "\"${gitUser}:${gitPass}\"@" + gitURL.substring(slashIdx + 3);
 
   sh """
-    rm -rf ${workspace}/${gitName}
-    git clone -b ${gitBranch} ${urlWithCreds} ${gitName}
-    echo `pwd && ls -l`
+    git clone https://github.com/Vauzc/jmeter-openshift-jenkins.git
+    echo 'pwd && ls -l'
   """
 
   // Create your ImageStream and BuildConfig in OpenShift
@@ -87,8 +64,6 @@ node('jenkins-agent'){
       oc process -f ${jobTemplatePath} -p \
       JENKINS_PIPELINE_RETURN_URL=${inputURL} \
       FILE_NAME=${fileName} \
-      USER_NAME=${jenkinsUser} \
-      PASSWORD=${jenkinsPass} \
       IMAGE=${imageURL}:latest \
       -n ${project} | oc create -f - -n ${project}
     """
