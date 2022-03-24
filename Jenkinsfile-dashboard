@@ -19,8 +19,9 @@ node {
   // Checkout the test suite repo into your Jenkins agent workspace
   // You can also use the "checkout scm" Jenkins step here if you like
 
+  git url: 'https://github.com/Vauzc/jmeter-openshift-jenkins.git'
+
   sh """
-    git clone https://github.com/Vauzc/jmeter-openshift-jenkins.git
     echo 'pwd && ls -l'
   """
 
