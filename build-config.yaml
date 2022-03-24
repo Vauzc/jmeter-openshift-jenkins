@@ -18,11 +18,7 @@ spec:
     type: Git
     contextDir: /
   strategy:
-    dockerStrategy:
-      from:
-        kind: ImageStreamTag
-        name: rhel7-jmeter3:latest
-        namespace: openshift
+    dockerStrategy: {}
     type: Docker
   triggers:
   - github:
